@@ -17,7 +17,7 @@ struct fragrance{
 };
 
 int menu(){
-  int e;
+  int choice;
   do{ 
     printf("Welcome to the Aromatix Fragrance Management System\n");
     printf("1. Add a new fragrance\n");
@@ -28,20 +28,21 @@ int menu(){
     printf("6. Search award winning fragrances\n");
     printf("7. Display all fragrances\n");
     printf("8. Display fragrances by year\n");
+    printf("9. Exit\n");
 
 
-    printf("Dvse thn epilogh:");
-    scanf("%d", &e);
-  }while (e < 1 || e > 8);
+    printf("Give your choice: ");
+    scanf("%d", &choice);
+  }while (choice < 1 || choice > 9);
 
-  return e;
+  return choice;
 }    
 
 
 int main(){
-  int ep;
+  int ch;
   
-  ep = menu();
+  ch = menu();
   return 0;
 }
 
