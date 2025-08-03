@@ -1,0 +1,37 @@
+# Compiled object files
+*.o
+
+# Compiled binaries
+*.out
+*.elf
+*.a
+*.so
+
+# Build directories
+/build/
+/bin/
+/obj/
+/dist/
+
+# Makefiles & temporary build files
+*.d
+*.dep
+*.cmd
+
+# Debug files
+*.stackdump
+core
+
+# Test logs
+*.log
+
+# VS Code local settings
+.vscode/
+
+# macOS artifacts (σε περίπτωση που το repo μεταφερθεί)
+.DS_Store
+
+# Backup files
+*~
+*.swp
+*.swo
