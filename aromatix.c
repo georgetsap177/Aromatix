@@ -1,9 +1,9 @@
 #include <stdio.h>
 
-#define MAX_NOTES 100
+
 #define MAX_CHAR_NOTES 50
 
-#define MAX_FRAGRANCES 100
+#define MAX_FRAGRANCES 2
 
 struct fragrance{
     char brand[50];
@@ -11,7 +11,7 @@ struct fragrance{
 
     int year;
     int notes_counter;
-    char notes[MAX_NOTES][MAX_CHAR_NOTES];
+    char notes[MAX_FRAGRANCES][MAX_CHAR_NOTES];
 
     float price;
     char season[50];
@@ -42,7 +42,7 @@ frag fragrance_input(){
   do{
     printf("Enter count of notes ");
     scanf("%d", &f.notes_counter);
-  }while (f.notes_counter < 1 || f.notes_counter > MAX_NOTES);
+  }while (f.notes_counter < 1 || f.notes_counter > MAX_FRAGRANCES);
   for(int i = 0; i < f.notes_counter; i++){
     printf("Enter note %d: ", i + 1);
     scanf("%s", f.notes[i]);
@@ -53,11 +53,12 @@ frag fragrance_input(){
 
   printf("Enter gender: ");
   scanf("%s", f.gender);
+
+  return f;
 }
 
-frag fragrance_output(){
-  frag f;
-
+void fragrance_output(frag f){
+  
   printf("Brand: %s\n", f.brand);
   printf("Model: %s\n", f.model);
   printf("Year: %d\n", f.year);
@@ -98,12 +99,40 @@ int menu(){
 
 
 int main(){
-  int ch;
-  frag in, out;
+  int ch, frag_counter = 0;
+  frag in, out, frag_structure[MAX_FRAGRANCES];
   
-  // ch = menu();
-  in = fragrance_input();
-  out = fragrance_output();
+  do{
+    
+  
+    ch = menu();
+    if(ch == 1){
+      if( frag_counter < MAX_FRAGRANCES ){
+        in = fragrance_input();
+        frag_structure[frag_counter] = in;
+        printf("\nINPUT\n");
+        
+        fragrance_output( in );
+        
+        printf("\nSTRUCTURE\n");
+        fragrance_output( frag_structure[frag_counter] );
+        frag_counter++;
+      }
+      else{
+        printf("You have reached the maximum limit of fragrances\n");
+      }
+      
+        
+    }
+    if(ch == 7){
+      for (int i = 0; i < frag_counter; i++){        
+        fragrance_output( frag_structure[i] );
+      }
+    }
+  }while(ch != 9);
+  
   return 0;
 }
 
+// in = fragrance_input();
+  // out = fragrance_output();
