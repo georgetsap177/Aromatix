@@ -95,13 +95,23 @@ int menu(){
   }while (choice < 1 || choice > 9);
 
   return choice;
-}    
+}
+
+
+void print_all_frags(frag *all_fragrances,int frag_number){
+  for (int i = 0; i < frag_number; i++){       
+    fragrance_output( all_fragrances[i] );
+  }
+  
+}
 
 
 int main(){
   int ch, frag_counter = 0;
-  frag in, out, frag_structure[MAX_FRAGRANCES];
-  
+  frag in, out, frag_structure[MAX_FRAGRANCES], disp;
+  for (int i = 0; i < frag_counter; i++){        
+    fragrance_output( frag_structure[i] );
+  }
   do{
     
   
@@ -110,12 +120,6 @@ int main(){
       if( frag_counter < MAX_FRAGRANCES ){
         in = fragrance_input();
         frag_structure[frag_counter] = in;
-        printf("\nINPUT\n");
-        
-        fragrance_output( in );
-        
-        printf("\nSTRUCTURE\n");
-        fragrance_output( frag_structure[frag_counter] );
         frag_counter++;
       }
       else{
@@ -125,14 +129,11 @@ int main(){
         
     }
     if(ch == 7){
-      for (int i = 0; i < frag_counter; i++){        
-        fragrance_output( frag_structure[i] );
-      }
+
+      print_all_frags(frag_structure, frag_counter );
+
     }
   }while(ch != 9);
   
   return 0;
 }
-
-// in = fragrance_input();
-  // out = fragrance_output();
