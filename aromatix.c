@@ -97,7 +97,7 @@ int menu(){
   return choice;
 }
 
-
+;
 void print_all_frags(frag *all_fragrances,int frag_number){
   for (int i = 0; i < frag_number; i++){       
     fragrance_output( all_fragrances[i] );
@@ -105,10 +105,19 @@ void print_all_frags(frag *all_fragrances,int frag_number){
   
 }
 
+void fragrances_by_year(frag *all_fragrances, int frag_number, int year_of_release){
+  for(int i = 0; i < frag_number; i++){
+    if(year_of_release == all_fragrances[i].year ){
+      fragrance_output( all_fragrances[i] );
+    }
+  }
+
+}
+
 
 int main(){
-  int ch, frag_counter = 0;
-  frag in, out, frag_structure[MAX_FRAGRANCES], disp;
+  int ch, frag_counter = 0, year;
+  frag in, out, frag_structure[MAX_FRAGRANCES];
   for (int i = 0; i < frag_counter; i++){        
     fragrance_output( frag_structure[i] );
   }
@@ -132,6 +141,12 @@ int main(){
 
       print_all_frags(frag_structure, frag_counter );
 
+    }
+    if(ch == 8){
+      printf("Type in the year of release\n");
+      scanf("%d", &year);
+
+      fragrances_by_year(frag_structure, frag_counter, year);
     }
   }while(ch != 9);
   
