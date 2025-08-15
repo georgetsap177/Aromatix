@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
-
+#include <ctype.h>
 
 #define MAX_CHAR_NOTES 50
 
-#define MAX_FRAGRANCES 2
+#define MAX_FRAGRANCES 100
 
 struct fragrance{
     char brand[50];
@@ -26,10 +26,10 @@ frag fragrance_input(){
   frag f;
 
   printf("Enter brand: ");
-  scanf("%s", f.brand);
+  scanf(" %[^\n]", f.brand);
   
   printf("Enter model: ");
-  scanf("%s", f.model);
+  scanf(" %[^\n]", f.model);
   
   printf("Enter year: ");
   scanf("%d", &f.year);
@@ -38,7 +38,7 @@ frag fragrance_input(){
   scanf("%f", &f.price);
   
   printf("Enter season: ");
-  scanf("%s", f.season);
+  scanf(" %[^\n]", f.season);
   
   do{
     printf("Enter count of notes ");
@@ -46,14 +46,14 @@ frag fragrance_input(){
   }while (f.notes_counter < 1 || f.notes_counter > MAX_FRAGRANCES);
   for(int i = 0; i < f.notes_counter; i++){
     printf("Enter note %d: ", i + 1);
-    scanf("%s", f.notes[i]);
+    scanf(" %[^\n]", f.notes[i]);
   }
 
   printf("Enter quantity: ");
   scanf("%f", &f.quantity);
 
   printf("Enter gender: ");
-  scanf("%s", f.gender);
+  scanf(" %[^\n]", f.gender);
 
   return f;
 }
@@ -66,12 +66,12 @@ void fragrance_output(frag f){
   printf("Price: %.2f\n", f.price);
   printf("Season: %s\n", f.season);
   
-  printf("Notes:\n");
+  printf("Notes: ");
   for(int i = 0; i < f.notes_counter; i++){
-    printf("%s\n", f.notes[i]);
+    printf("%s, ", f.notes[i]);
   }
 
-  printf("Quantity: %2f\n", f.quantity);
+  printf("\nQuantity: %.2f\n", f.quantity);
   printf("Gender: %s\n\n", f.gender);
 }
 
@@ -136,8 +136,106 @@ void sort_fragrances_desc_year(frag *all_fragrances, int frag_number ){
     
     }  
   }
-}  
+} 
 
+void capitalize_words(char *str) {
+    int cap_next = 1; 
+    for (int i = 0; str[i] != '\0'; i++) {
+        if (isspace((unsigned char)str[i])) {
+            cap_next = 1;
+        } else if (cap_next && isalpha((unsigned char)str[i])) {
+            str[i] = toupper((unsigned char)str[i]);
+            cap_next = 0;
+        } else {
+            str[i] = tolower((unsigned char)str[i]);
+        }
+    }
+}
+
+void save_fragrances_to_file(frag arr[], int count) {
+    FILE *fp = fopen("fragrances.txt", "w");
+    if (fp == NULL) {
+        perror("Error opening file");
+        return;
+    }
+
+    fprintf(fp, "%d\n", count);
+
+    for (int i = 0; i < count; i++) {
+        capitalize_words(arr[i].brand);
+        capitalize_words(arr[i].model);
+        capitalize_words(arr[i].season);
+        capitalize_words(arr[i].gender);
+        for (int j = 0; j < arr[i].notes_counter; j++) {
+            capitalize_words(arr[i].notes[j]);
+        }
+
+        fprintf(fp, "%s\n", arr[i].brand);
+        fprintf(fp, "%s\n", arr[i].model);
+        fprintf(fp, "%d\n", arr[i].year);
+
+        fprintf(fp, "%d\n", arr[i].notes_counter);
+        for (int j = 0; j < arr[i].notes_counter; j++) {
+            fprintf(fp, "%s", arr[i].notes[j]);
+            if (j < arr[i].notes_counter - 1) {
+                fprintf(fp, ", ");
+            }
+        }
+
+        fprintf(fp, "\n%.2f\n", arr[i].price);
+        fprintf(fp, "%s\n", arr[i].season);
+        fprintf(fp, "%.2f\n", arr[i].quantity);
+        fprintf(fp, "%s\n", arr[i].gender);
+    }
+
+    fclose(fp);
+}
+
+
+frag* load_fragrances_from_file(frag *arr, int *count) {    
+    FILE *fp = fopen("fragrances.txt", "r");
+
+    if (fp == NULL) {
+        perror("Error opening file");
+        *count = 0;
+        return NULL;
+    }
+
+    if (fscanf(fp, "%d\n", count) != 1) {
+        fclose(fp);
+        *count = 0;
+        return NULL;
+    }
+
+    
+    for (int i = 0; i < *count; i++) {
+        fgets(arr[i].brand, sizeof(arr[i].brand), fp);
+        arr[i].brand[strcspn(arr[i].brand, "\n")] = '\0';
+
+        fgets(arr[i].model, sizeof(arr[i].model), fp);
+        arr[i].model[strcspn(arr[i].model, "\n")] = '\0';
+
+        fscanf(fp, "%d\n", &arr[i].year);
+
+        fscanf(fp, "%d\n", &arr[i].notes_counter);
+        for (int j = 0; j < arr[i].notes_counter; j++) {
+            fscanf(fp, "%99[^,\n], ", arr[i].notes[j]);
+        }
+
+        fscanf(fp, "%f\n", &arr[i].price);
+
+        fgets(arr[i].season, sizeof(arr[i].season), fp);
+        arr[i].season[strcspn(arr[i].season, "\n")] = '\0';
+
+        fscanf(fp, "%f\n", &arr[i].quantity);
+
+        fgets(arr[i].gender, sizeof(arr[i].gender), fp);
+        arr[i].gender[strcspn(arr[i].gender, "\n")] = '\0';
+    }
+
+    fclose(fp);
+    return arr;
+}
 
 
 int main(){
@@ -145,12 +243,9 @@ int main(){
   frag in, out, frag_structure[MAX_FRAGRANCES];
   char brand[50];
 
-  for (int i = 0; i < frag_counter; i++){        
-    fragrance_output( frag_structure[i] );
-  }
-  do{
-    
-  
+  load_fragrances_from_file(frag_structure , &frag_counter);
+
+  do{ 
     ch = menu();
     if(ch == 1){
       if( frag_counter < MAX_FRAGRANCES ){
@@ -182,13 +277,18 @@ int main(){
     else if(ch == 3){
     
       printf("Type in the brand of fragrance\n");
-      scanf("%s", &brand);
+      scanf(" %[^\n]", &brand);
       fragrances_by_brand(frag_structure, frag_counter, brand);
 
     }
   }while(ch != 9);
+
+  save_fragrances_to_file(frag_structure, frag_counter);
+
   
   return 0;
 }
+
+
 
 
