@@ -15,7 +15,7 @@ struct fragrance{
     char notes[MAX_FRAGRANCES][MAX_CHAR_NOTES];
 
     float price;
-    char season[50];
+    char season[50], perfumer[50];
     float quantity;
     char gender[50];    
 };
@@ -39,6 +39,9 @@ frag fragrance_input(){
   
   printf("Enter season: ");
   scanf(" %[^\n]", f.season);
+
+  printf("Enter perfumer: ");
+  scanf(" %[^\n]", f.perfumer);
   
   do{
     printf("Enter count of notes ");
@@ -65,6 +68,7 @@ void fragrance_output(frag f){
   printf("Year: %d\n", f.year);
   printf("Price: %.2f\n", f.price);
   printf("Season: %s\n", f.season);
+  printf("Perfumer: %s\n", f.perfumer);
   
   printf("Notes: ");
   for(int i = 0; i < f.notes_counter; i++){
@@ -118,6 +122,14 @@ void fragrances_by_year(frag *all_fragrances, int frag_number, int year_of_relea
 void fragrances_by_brand(frag *all_fragrances, int frag_number, char *brand_fragrance){
   for(int i = 0; i < frag_number; i++){
     if(strcmp(brand_fragrance, all_fragrances[i].brand ) == 0){
+      fragrance_output( all_fragrances[i] );
+    }
+  }
+}
+
+void fragrance_perfumers(frag *all_fragrances, int frag_number, char *perfumer_of_fragrance){
+  for(int i = 0; i < frag_number; i++){
+    if(strcmp(perfumer_of_fragrance, all_fragrances[i].perfumer ) == 0){
       fragrance_output( all_fragrances[i] );
     }
   }
@@ -241,7 +253,7 @@ frag* load_fragrances_from_file(frag *arr, int *count) {
 int main(){
   int ch, frag_counter = 0, year;
   frag in, out, frag_structure[MAX_FRAGRANCES];
-  char brand[50];
+  char brand[50], perfumer[50];
 
   load_fragrances_from_file(frag_structure , &frag_counter);
 
@@ -279,6 +291,14 @@ int main(){
       printf("Type in the brand of fragrance\n");
       scanf(" %[^\n]", &brand);
       fragrances_by_brand(frag_structure, frag_counter, brand);
+
+    }
+    else if(ch == 5){
+
+
+      printf("Type in the perfumer of the fragrance\n");
+      scanf(" %[^\n]", &perfumer);
+      fragrance_perfumers(frag_structure, frag_counter, perfumer);
 
     }
   }while(ch != 9);
