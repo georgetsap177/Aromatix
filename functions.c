@@ -62,39 +62,34 @@ void fragrance_output(frag f){
   printf("Gender: %s\n\n", f.gender);
 }
 
-
 void print_all_frags(frag *all_fragrances,int frag_number){
+  printf("\n");
   for (int i = 0; i < frag_number; i++){       
     fragrance_output( all_fragrances[i] );
   }
   
 }
 
-
 int menu(){
   int choice;
   do{ 
     printf("Welcome to the Aromatix Fragrance Management System\n");
     printf("1. Add a new fragrance\n");
-    printf("2. Edit a fragrance\n");
-    printf("3. Search a fragrance by brand\n");
-    printf("4. Search by notes\n");
-    printf("5. Search perfumers\n");
-    printf("6. Search fragrances from a specific year\n");    
-    printf("7. Display all fragrances\n");
-    printf("8. Sort fragrances by year descending\n");
-    printf("9. Exit\n");
+    printf("2. Search a fragrance by brand\n");
+    printf("3. Search by notes\n");
+    printf("4. Search perfumers\n");
+    printf("5. Search fragrances from a specific year\n");    
+    printf("6. Display all fragrances\n");
+    printf("7. Sort fragrances by year descending\n");
+    printf("8. Exit\n");
 
 
     printf("Give your choice: ");
     scanf("%d", &choice);
-  }while (choice < 1 || choice > 9);
+  }while (choice < 1 || choice > 8);
 
   return choice;
 }
-
-
-
 
 void fragrances_by_year(frag *all_fragrances, int frag_number, int year_of_release){
   for(int i = 0; i < frag_number; i++){
@@ -104,7 +99,6 @@ void fragrances_by_year(frag *all_fragrances, int frag_number, int year_of_relea
   }
 
 }
-
 
 void fragrances_by_brand(frag *all_fragrances, int frag_number, char *brand_fragrance){
   int compareIgnoreCase(const char *s1, const char *s2);
@@ -127,7 +121,6 @@ void fragrances_by_notes(frag *all_fragrances, int frag_number, char *notes_frag
   }
 }
 
-
 void fragrance_perfumers(frag *all_fragrances, int frag_number, char *perfumer_of_fragrance){
   int compareIgnoreCase(const char *s1, const char *s2);
   for(int i = 0; i < frag_number; i++){
@@ -136,10 +129,6 @@ void fragrance_perfumers(frag *all_fragrances, int frag_number, char *perfumer_o
     }
   }
 }
-
-
-
-
 
 void sort_fragrances_desc_year(frag *all_fragrances, int frag_number ){
   frag temp1;
@@ -166,6 +155,7 @@ int compareIgnoreCase(const char *s1, const char *s2) {
     }
     return *s1 == *s2;
 }
+
 
 void capitalize_words(char *str) {
     int cap_next = 1; 
